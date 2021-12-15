@@ -10,7 +10,9 @@ def get_input(day):
 
 
 def check(msg, v1, v2):
-    if v1 != v2:
+    if v1 == v2:
+        print("Check %s OK: %s" % (msg, v1))
+    else:
         print("Check %s failed: %s != %s" % (msg, v1, v2))
         sys.exit(1)
 
