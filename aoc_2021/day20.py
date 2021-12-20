@@ -40,44 +40,37 @@ def enhance_point(enhancement: str, grid: list[str], x: int, y: int):
 
 
 def enhance(enhancement: str, grid: list[str], offset: int):
+    border = enhancement[0 if grid[0][0] == "0" else -1]
     return (
-        grid[:offset]
+        [border * len(grid[0]) for _ in range(offset)]
         + [
-            "0" * offset
+            border * offset
             + "".join(
                 enhance_point(enhancement, grid, x, y + offset)
                 for x in range(offset, len(row) - offset)
             )
-            + "0" * offset
+            + border * offset
             for y, row in enumerate(grid[offset:-offset])
         ]
-        + grid[-offset:]
+        + [border * len(grid[0]) for _ in range(offset)]
     )
 
 
-def print_grid(grid):
-    print(
-        "\n".join(
-            row.translate({ord("0"): ".", ord("1"): "#"}) for row in grid[-5:]
-        )
-        + "\n"
-    )
-
-
-def part1(lines):
+def doit(lines, runs):
     enhancement, grid = parse_input(lines)
-    runs = 2
     grid = blowup(grid, runs + 1)
-    print_grid(grid)
     for run in range(runs):
         grid = enhance(enhancement, grid, runs - run)
-        print_grid(grid)
     return sum(sum(int(c) for c in row) for row in grid)
 
 
+def part1(lines):
+    return doit(lines, 2)
+
+
 def part2(lines):
-    pass
+    return doit(lines, 50)
 
 
 if __name__ == "__main__":
-    common.run(20, test_input, 35, test_input, 42, part1, part2)
+    common.run(20, test_input, 35, test_input, 3351, part1, part2)
